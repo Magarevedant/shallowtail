@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#147d5a">
     <title>Merchant setup — Shallowtail</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/styles.css">
   </head>
   <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NG3C5HRN"></script>
@@ -13,6 +16,13 @@
   gtag('js', new Date());
 </script>
   <body>
+<nav class="app-nav" aria-label="Main navigation">
+  <a class="app-brand" href="/">Shallowtail</a>
+  <div>
+    <a href="/generate.html">Create link</a>
+    <a href="/track.html">Payment tracker</a>
+  </div>
+</nav>
     <main class="page-shell">
       <section class="card">
         <p class="eyebrow">ONE-TIME SETUP</p>
@@ -70,5 +80,6 @@
       });
     </script>
     <footer class="site-footer">A Vedant Magare Production</footer>
+    <script src="/pwa.js"></script>
   </body>
 </html>

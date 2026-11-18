@@ -4,7 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Create and share simple UPI payment links in seconds.">
+    <meta name="theme-color" content="#147d5a">
     <title>Shallowtail — Simple UPI payment links</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/styles.css">
   </head>
   <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NG3C5HRN"></script>
@@ -14,15 +17,24 @@
   gtag('js', new Date());
 </script>
   <body>
+<nav class="app-nav" aria-label="Main navigation">
+  <a class="app-brand" href="/">Shallowtail</a>
+  <div>
+    <a href="/generate.html">Create link</a>
+    <a href="/track.html">Payment tracker</a>
+  </div>
+</nav>
     <main class="home-shell">
       <section class="home-content">
         <p class="eyebrow">SIMPLE · DIRECT · UPI</p>
         <h1>Payments, made simple.</h1>
         <p class="home-intro">Create a UPI payment link in seconds. No checkout setup, no account required—just a link your customers can pay with.</p>
         <a class="home-cta" href="/generate.html">Create a payment link <span aria-hidden="true">→</span></a>
+        <p class="home-secondary"><a href="/track.html">View payment tracker</a></p>
         <p class="home-secondary"><a href="/setup.html">Set up or update merchant details</a></p>
       </section>
     </main>
     <footer class="site-footer">A Vedant Magare Production</footer>
+    <script src="/pwa.js"></script>
   </body>
 </html>

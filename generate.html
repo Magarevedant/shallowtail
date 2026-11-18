@@ -3,7 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#147d5a">
     <title>Create a UPI payment link</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/styles.css">
   </head>
   <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NG3C5HRN"></script>
@@ -13,6 +16,13 @@
   gtag('js', new Date());
 </script>
   <body>
+    <nav class="app-nav" aria-label="Main navigation">
+      <a class="app-brand" href="/">Shallowtail</a>
+      <div>
+        <a href="/generate.html" aria-current="page">Create link</a>
+        <a href="/track.html">Payment tracker</a>
+      </div>
+    </nav>
     <main class="page-shell">
       <section class="card">
         <p class="eyebrow">SIMPLE · SECURE · UPI</p>
@@ -34,6 +44,7 @@
         <p class="profile-link">Merchant details saved? <a href="/setup.html">Edit your setup</a></p>
       </section>
     </main>
+    <script src="/payment-store.js"></script>
     <script>
       const form = document.getElementById("payment-form");
       const result = document.getElementById("result");
@@ -125,6 +136,28 @@
           shareStatus.className = "share-status";
           result.className = "result-card";
           result.replaceChildren(message, link, shareStatus);
+          const trackerMessage = document.createElement("p");
+          trackerMessage.className = "tracker-status";
+          try {
+            window.ShallowtailPayments.add({
+              amount: formData.get("amount").toString(),
+              note: formData.get("note").toString().trim(),
+              url: paymentUrl.href,
+              createdAt: new Date().toISOString(),
+              status: "unpaid",
+            });
+            trackerMessage.textContent = "Saved as unpaid in your payment tracker.";
+            const trackerLink = document.createElement("a");
+            trackerLink.href = "/track.html";
+            trackerLink.textContent = "View tracker";
+            trackerMessage.append(" ", trackerLink);
+          } catch (error) {
+            trackerMessage.classList.add("error-text");
+            trackerMessage.textContent = error instanceof Error
+              ? `Payment link created, but it could not be saved to your tracker: ${error.message}`
+              : "Payment link created, but it could not be saved to your tracker.";
+          }
+          result.append(trackerMessage);
           await shareOrCopy(paymentUrl.href, shareStatus);
         } catch (error) {
           result.className = "result-card error";
@@ -134,6 +167,7 @@
         }
       });
     </script>
+    <script src="/pwa.js"></script>
     <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2b131224dfd64d86be8930f2ad38600e"}'></script><!-- End Cloudflare Web Analytics -->
     <footer class="site-footer">A Vedant Magare Production</footer>
   </body>

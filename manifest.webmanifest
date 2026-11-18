@@ -1,0 +1,18 @@
+{
+  "name": "Shallowtail — UPI payment links",
+  "short_name": "Shallowtail",
+  "description": "Create UPI payment links and track them on this device.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f6f4",
+  "theme_color": "#147d5a",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

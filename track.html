@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#147d5a">
+    <title>Payment tracker — Shallowtail</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <nav class="app-nav" aria-label="Main navigation">
+      <a class="app-brand" href="/">Shallowtail</a>
+      <div>
+        <a href="/generate.html">Create link</a>
+        <a href="/track.html" aria-current="page">Payment tracker</a>
+      </div>
+    </nav>
+    <main class="tracker-shell">
+      <div class="tracker-heading">
+        <div>
+          <p class="eyebrow">YOUR PAYMENTS</p>
+          <h1>Payment tracker</h1>
+          <p class="intro">Saved only in this browser. Payment statuses are manual and aren’t verified by UPI.</p>
+        </div>
+        <a class="home-cta" href="/generate.html">Create a payment link <span aria-hidden="true">→</span></a>
+      </div>
+      <div id="tracker-message" class="result-card tracker-message" aria-live="polite"></div>
+      <section id="tracker-summary" class="tracker-summary" aria-label="Payment totals"></section>
+      <section id="tracker-list" class="tracker-list" aria-label="Created payments"></section>
+    </main>
+    <footer class="site-footer">A Vedant Magare Production</footer>
+    <script src="/payment-store.js"></script>
+    <script>
+      const trackerList = document.getElementById("tracker-list");
+      const trackerSummary = document.getElementById("tracker-summary");
+      const trackerMessage = document.getElementById("tracker-message");
+      const currency = new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 2,
+      });
+
+      function element(tagName, className, text) {
+        const node = document.createElement(tagName);
+        if (className) {
+          node.className = className;
+        }
+        if (text) {
+          node.textContent = text;
+        }
+        return node;
+      }
+
+      function render() {
+        trackerList.replaceChildren();
+        trackerSummary.replaceChildren();
+        trackerMessage.className = "result-card tracker-message";
+        trackerMessage.textContent = "";
+
+        let payments;
+        try {
+          payments = window.ShallowtailPayments.list();
+        } catch (error) {
+          trackerMessage.classList.add("error");
+          trackerMessage.textContent = error instanceof Error
+            ? error.message
+            : "Could not load your saved payment tracker.";
+          return;
+        }
+
+        const paidCount = payments.filter((payment) => payment.status === "paid").length;
+        const unpaidCount = payments.length - paidCount;
+        [
+          ["Total", payments.length],
+          ["Paid", paidCount],
+          ["Unpaid", unpaidCount],
+        ].forEach(([label, count]) => {
+          const item = element("div", "summary-item");
+          item.append(element("strong", "", String(count)), element("span", "", label));
+          trackerSummary.append(item);
+        });
+
+        if (payments.length === 0) {
+          const empty = element("div", "empty-tracker");
+          empty.append(
+            element("p", "", "No payments tracked yet. Created payment links will appear here."),
+          );
+          const createLink = element("a", "", "Create your first payment link");
+          createLink.href = "/generate.html";
+          empty.append(createLink);
+          trackerList.append(empty);
+          return;
+        }
+
+        payments.forEach((payment) => {
+          const entry = element("article", "payment-entry");
+          const details = document.createElement("div");
+          details.append(
+            element("h2", "", currency.format(Number(payment.amount))),
+            element("p", "entry-note", payment.note || "No payment note"),
+            element("p", "", new Date(payment.createdAt).toLocaleString()),
+          );
+          const statusLabel = payment.status === "paid" ? "Paid" : "Unpaid";
+          const status = element("p", `entry-status ${payment.status}`, `Status: ${statusLabel}`);
+          details.append(status);
+
+          const link = element("a", "", "Open payment link");
+          link.href = payment.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          details.append(link);
+
+          const toggle = element("button", "", payment.status === "paid" ? "Mark as unpaid" : "Mark as paid");
+          toggle.type = "button";
+          toggle.setAttribute("aria-pressed", String(payment.status === "paid"));
+          toggle.setAttribute("aria-label", `${payment.status === "paid" ? "Mark unpaid" : "Mark paid"}: ${currency.format(Number(payment.amount))}`);
+          toggle.addEventListener("click", () => {
+            try {
+              window.ShallowtailPayments.setStatus(
+                payment.id,
+                payment.status === "paid" ? "unpaid" : "paid",
+              );
+              render();
+            } catch (error) {
+              trackerMessage.className = "result-card tracker-message error";
+              trackerMessage.textContent = error instanceof Error
+                ? error.message
+                : "Could not update the payment status.";
+            }
+          });
+
+          entry.append(details, toggle);
+          trackerList.append(entry);
+        });
+      }
+
+      window.addEventListener("storage", (event) => {
+        if (event.key === "shallowtail:payments") {
+          render();
+        }
+      });
+
+      render();
+    </script>
+    <script src="/pwa.js"></script>
+  </body>
+</html>
