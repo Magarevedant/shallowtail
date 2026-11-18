@@ -137,6 +137,12 @@ module.exports = async (request, response) => {
     <title>Pay ${safeDisplayName}</title>
     <link rel="stylesheet" href="/payment.css">
   </head>
+  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NG3C5HRN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
   <body>
     <main class="payment-card">
       <p class="eyebrow">UPI payment request</p>

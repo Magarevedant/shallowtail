@@ -6,6 +6,12 @@
     <title>Create a UPI payment link</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
+  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NG3C5HRN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
   <body>
     <main class="page-shell">
       <section class="card">
@@ -32,6 +38,34 @@
       const form = document.getElementById("payment-form");
       const result = document.getElementById("result");
       let merchantProfile;
+
+      async function shareOrCopy(paymentUrl, status) {
+        if (typeof navigator.share === "function") {
+          try {
+            await navigator.share({ title: "UPI payment link", url: paymentUrl });
+            status.textContent = "Link shared.";
+            return;
+          } catch (error) {
+            if (error instanceof DOMException && error.name === "AbortError") {
+              status.textContent = "Sharing cancelled. Copy the link above if needed.";
+              return;
+            }
+          }
+        }
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          try {
+            await navigator.clipboard.writeText(paymentUrl);
+            status.textContent = "Link copied to clipboard.";
+            return;
+          } catch {
+            status.textContent = "Could not share or copy the link. Copy the URL above to share it.";
+            return;
+          }
+        }
+
+        status.textContent = "Sharing is unavailable here. Copy the URL above to share it.";
+      }
 
       try {
         const savedProfile = localStorage.getItem("shallowtail:merchant");
@@ -86,40 +120,12 @@
           link.href = paymentUrl.href;
           link.textContent = paymentUrl.href;
           const message = document.createElement("p");
-          message.textContent = "Your payment link is ready:";
-          const shareButton = document.createElement("button");
-          shareButton.type = "button";
-          shareButton.textContent = "Share payment link";
+          message.textContent = "Your payment link is ready. Opening the share sheet…";
           const shareStatus = document.createElement("p");
           shareStatus.className = "share-status";
-          shareButton.addEventListener("click", async () => {
-            if (typeof navigator.share === "function") {
-              try {
-                await navigator.share({ title: "UPI payment link", url: paymentUrl.href });
-                shareStatus.textContent = "Link shared.";
-                return;
-              } catch (error) {
-                if (error instanceof DOMException && error.name === "AbortError") {
-                  return;
-                }
-              }
-            }
-
-            if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
-              try {
-                await navigator.clipboard.writeText(paymentUrl.href);
-                shareStatus.textContent = "Link copied to clipboard.";
-                return;
-              } catch {
-                shareStatus.textContent = "Could not share or copy the link. Copy the URL above to share it.";
-                return;
-              }
-            }
-
-            shareStatus.textContent = "Sharing is unavailable here. Copy the URL above to share it.";
-          });
           result.className = "result-card";
-          result.replaceChildren(message, link, shareButton, shareStatus);
+          result.replaceChildren(message, link, shareStatus);
+          await shareOrCopy(paymentUrl.href, shareStatus);
         } catch (error) {
           result.className = "result-card error";
           result.textContent = error instanceof Error ? error.message : "Could not create payment link.";
