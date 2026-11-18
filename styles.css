@@ -177,7 +177,8 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
   display: block;
   width: 100%;
   min-height: 3rem;
@@ -202,7 +203,8 @@ textarea::placeholder {
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   border-color: var(--green);
   box-shadow: 0 0 0 3px #147d5a1a;
 }
@@ -221,6 +223,70 @@ textarea:focus {
 
 .input-with-prefix input {
   padding-left: 2rem;
+}
+
+.share-options {
+  margin: 1.75rem 0 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.share-options legend {
+  padding: 0 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.share-options p,
+.field-help {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.share-option-buttons {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.share-option-buttons .share-option {
+  flex: 1;
+  min-height: 2.8rem;
+  margin: 0.75rem 0 0;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #405149;
+}
+
+.share-option-buttons .share-option:hover:not([aria-pressed="true"]) {
+  background: #e9f2ed;
+}
+
+.share-option-buttons .share-option[aria-pressed="true"] {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+.customer-contact {
+  margin-top: 1.1rem;
+}
+
+.phone-input {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.8fr) minmax(0, 1fr);
+  gap: 0.6rem;
+}
+
+.phone-input select,
+.phone-input input {
+  min-width: 0;
+}
+
+.field-help {
+  margin-top: 0.4rem;
 }
 
 .section-heading {

@@ -38,6 +38,15 @@
           <label for="email">Contact email <span class="required">Optional</span></label>
           <input id="email" name="email" type="email" maxlength="254" placeholder="you@example.com" autocomplete="email">
 
+          <fieldset class="share-options">
+            <legend>After creating a payment link</legend>
+            <p>Choose an app to open with the payment link, or leave both unselected to use the normal share options.</p>
+            <div class="share-option-buttons">
+              <button id="whatsapp-option" class="share-option" type="button" aria-pressed="false">WhatsApp</button>
+              <button id="sms-option" class="share-option" type="button" aria-pressed="false">SMS</button>
+            </div>
+          </fieldset>
+
           <button type="submit">Save and continue <span aria-hidden="true">→</span></button>
         </form>
         <div id="setup-message" aria-live="polite"></div>
@@ -47,6 +56,18 @@
     <script>
       const setupForm = document.getElementById("setup-form");
       const setupMessage = document.getElementById("setup-message");
+      const whatsappOption = document.getElementById("whatsapp-option");
+      const smsOption = document.getElementById("sms-option");
+      let selectedShareMethod = "";
+
+      function setShareMethod(method) {
+        selectedShareMethod = selectedShareMethod === method ? "" : method;
+        whatsappOption.setAttribute("aria-pressed", String(selectedShareMethod === "whatsapp"));
+        smsOption.setAttribute("aria-pressed", String(selectedShareMethod === "sms"));
+      }
+
+      whatsappOption.addEventListener("click", () => setShareMethod("whatsapp"));
+      smsOption.addEventListener("click", () => setShareMethod("sms"));
 
       try {
         const savedProfile = localStorage.getItem("shallowtail:merchant");
@@ -55,6 +76,9 @@
           setupForm.elements.upi_id.value = profile.upi_id || "";
           setupForm.elements.merchant_name.value = profile.merchant_name || "";
           setupForm.elements.email.value = profile.email || "";
+          if (profile.share_method === "whatsapp" || profile.share_method === "sms") {
+            setShareMethod(profile.share_method);
+          }
         }
       } catch {
         setupMessage.className = "result-card error";
@@ -68,6 +92,7 @@
           upi_id: formData.get("upi_id").toString().trim(),
           merchant_name: formData.get("merchant_name").toString().trim(),
           email: formData.get("email").toString().trim(),
+          share_method: selectedShareMethod,
         };
 
         try {
