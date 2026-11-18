@@ -24,9 +24,69 @@ body {
     #f3f6f4;
 }
 
+.home-shell {
+  display: grid;
+  min-height: calc(100vh - 3.5rem);
+  place-items: center;
+  padding: 2rem 1rem;
+}
+
+.home-content {
+  width: min(100%, 42rem);
+  text-align: center;
+}
+
+.home-content h1 {
+  margin-bottom: 1rem;
+  font-size: clamp(2.5rem, 9vw, 4.5rem);
+  letter-spacing: -0.065em;
+  line-height: 1.03;
+}
+
+.home-intro {
+  max-width: 34rem;
+  margin: 0 auto 1.8rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  line-height: 1.7;
+}
+
+.home-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 3.2rem;
+  padding: 0.8rem 1.3rem;
+  border-radius: 0.7rem;
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 140ms ease, transform 140ms ease;
+}
+
+.home-cta:hover {
+  background: var(--green-dark);
+  transform: translateY(-1px);
+}
+
+.home-secondary,
+.profile-link {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.home-secondary a,
+.profile-link a {
+  color: var(--green-dark);
+}
+
 .page-shell {
   display: grid;
-  min-height: 100vh;
+  min-height: calc(100vh - 3.5rem);
   place-items: center;
   padding: 2rem 1rem;
 }
@@ -203,6 +263,14 @@ button:disabled {
   border-color: #f3d0ca;
   background: #fff8f6;
   color: #9e3428;
+}
+
+.site-footer {
+  padding: 0.75rem 1rem 1.25rem;
+  color: #84918b;
+  font-size: 0.72rem;
+  letter-spacing: 0.025em;
+  text-align: center;
 }
 
 @media (prefers-reduced-motion: reduce) {

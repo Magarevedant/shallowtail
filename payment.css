@@ -16,18 +16,20 @@
 }
 
 body {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
   padding: 2rem 1rem;
-  place-items: center;
   background:
     radial-gradient(ellipse at 50% 0, #e1f1e9 0, transparent 38rem),
     #f3f6f4;
 }
 
 .payment-card {
+  margin: auto;
   width: min(100%, 31rem);
   padding: clamp(1.5rem, 6vw, 2.75rem);
   border: 1px solid #e7eeea;
@@ -129,4 +131,13 @@ h1 {
   margin-top: 1.25rem;
   color: var(--green-dark);
   font-size: 0.9rem;
+}
+
+.site-footer {
+  width: 100%;
+  padding-top: 1.5rem;
+  color: #84918b;
+  font-size: 0.72rem;
+  letter-spacing: 0.025em;
+  text-align: center;
 }

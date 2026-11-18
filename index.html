@@ -3,90 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create a UPI payment link</title>
+    <meta name="description" content="Create and share simple UPI payment links in seconds.">
+    <title>Shallowtail — Simple UPI payment links</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
-    <main class="page-shell">
-      <section class="card">
-        <p class="eyebrow">SIMPLE · SECURE · UPI</p>
-        <h1>Create a payment link</h1>
-        <p class="intro">Add the payment details. Optional information will appear on your payment page.</p>
-        <form id="payment-form">
-          <label for="amount">Price <span class="required">Required</span></label>
-          <div class="input-with-prefix">
-            <span aria-hidden="true">₹</span>
-            <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
-          </div>
-
-          <label for="upi-id">UPI ID <span class="required">Required</span></label>
-          <input id="upi-id" name="upi_id" type="text" pattern="[A-Za-z0-9._-]+@[A-Za-z0-9.-]+" placeholder="name@bank" autocomplete="off" required>
-
-          <div class="section-heading">
-            <h2>More details</h2>
-            <span>Optional</span>
-          </div>
-
-          <label for="merchant-name">Merchant name</label>
-          <input id="merchant-name" name="merchant_name" type="text" maxlength="100" placeholder="Your business or name" autocomplete="organization">
-
-          <label for="email">Contact email</label>
-          <input id="email" name="email" type="email" maxlength="254" placeholder="you@example.com" autocomplete="email">
-
-          <label for="note">Payment note</label>
-          <textarea id="note" name="note" maxlength="140" rows="3" placeholder="What is this payment for?"></textarea>
-
-          <button type="submit">Create payment link <span aria-hidden="true">→</span></button>
-        </form>
-        <div id="result" aria-live="polite"></div>
+    <main class="home-shell">
+      <section class="home-content">
+        <p class="eyebrow">SIMPLE · DIRECT · UPI</p>
+        <h1>Payments, made simple.</h1>
+        <p class="home-intro">Create a UPI payment link in seconds. No checkout setup, no account required—just a link your customers can pay with.</p>
+        <a class="home-cta" href="/generate.html">Create a payment link <span aria-hidden="true">→</span></a>
+        <p class="home-secondary"><a href="/setup.html">Set up or update merchant details</a></p>
       </section>
     </main>
-    <script>
-      const form = document.getElementById("payment-form");
-      const result = document.getElementById("result");
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData(form);
-        const button = form.querySelector("button[type=submit]");
-        button.disabled = true;
-        result.replaceChildren();
-        result.textContent = "Creating payment link...";
-
-        try {
-          const response = await fetch("/api/payment", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              amount: formData.get("amount").toString(),
-              upi_id: formData.get("upi_id").toString().trim(),
-              merchant_name: formData.get("merchant_name").toString().trim(),
-              email: formData.get("email").toString().trim(),
-              note: formData.get("note").toString().trim(),
-            }),
-          });
-          const data = await response.json();
-          if (!response.ok) {
-            throw new Error(data.error || "Could not create payment link.");
-          }
-
-          const paymentUrl = new URL(data.url, window.location.origin);
-          const link = document.createElement("a");
-          link.href = paymentUrl.href;
-          link.textContent = paymentUrl.href;
-          const message = document.createElement("p");
-          message.textContent = "Share this payment page:";
-          result.className = "result-card";
-          result.replaceChildren(message, link);
-        } catch (error) {
-          result.className = "result-card error";
-          result.textContent = error.message;
-        } finally {
-          button.disabled = false;
-        }
-      });
-    </script>
-    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2b131224dfd64d86be8930f2ad38600e"}'></script><!-- End Cloudflare Web Analytics -->
+    <footer class="site-footer">A Vedant Magare Production</footer>
   </body>
 </html>

@@ -82,7 +82,8 @@ module.exports = async (request, response) => {
     const token = encodePaymentData(data);
     const query = new URLSearchParams({ data: token });
     response.setHeader("Cache-Control", "no-store");
-    return response.status(200).json({ url: `/api/payment?${query}` });
+    const paymentPath = `/api/payment?${query}`;
+    return response.status(200).json({ url: paymentPath });
   }
 
   if (request.method !== "GET") {
@@ -152,6 +153,7 @@ module.exports = async (request, response) => {
       </section>
       ${email ? `<a class="contact" href="${safeMailto}">Questions? Contact ${safeEmail}</a>` : ""}
     </main>
+    <footer class="site-footer">A Vedant Magare Production</footer>
   </body>
 </html>`);
   } catch (error) {

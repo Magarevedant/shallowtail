@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create a UPI payment link</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="card">
+        <p class="eyebrow">SIMPLE · SECURE · UPI</p>
+        <h1>Create a payment link</h1>
+        <p class="intro">Enter an amount and optional payment details. Your saved merchant profile will be included automatically.</p>
+        <form id="payment-form">
+          <label for="amount">Price <span class="required">Required</span></label>
+          <div class="input-with-prefix">
+            <span aria-hidden="true">₹</span>
+            <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
+          </div>
+
+          <label for="note">Payment note</label>
+          <textarea id="note" name="note" maxlength="140" rows="3" placeholder="What is this payment for?"></textarea>
+
+          <button type="submit">Create payment link <span aria-hidden="true">→</span></button>
+        </form>
+        <div id="result" aria-live="polite"></div>
+        <p class="profile-link">Merchant details saved? <a href="/setup.html">Edit your setup</a></p>
+      </section>
+    </main>
+    <script>
+      const form = document.getElementById("payment-form");
+      const result = document.getElementById("result");
+      let merchantProfile;
+
+      try {
+        const savedProfile = localStorage.getItem("shallowtail:merchant");
+        merchantProfile = savedProfile ? JSON.parse(savedProfile) : null;
+      } catch {
+        result.className = "result-card error";
+        result.textContent = "Could not read your saved merchant setup. Please enable local storage and try again.";
+      }
+
+      if (!merchantProfile && !result.textContent) {
+        window.location.replace("/setup.html");
+      } else if (merchantProfile && (
+        typeof merchantProfile.upi_id !== "string"
+        || !/^[A-Za-z0-9._\-]+@[A-Za-z0-9.-]+$/.test(merchantProfile.upi_id)
+      )) {
+        window.location.replace("/setup.html");
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!merchantProfile) {
+          result.className = "result-card error";
+          result.textContent = "Complete your merchant setup before creating a payment link.";
+          return;
+        }
+
+        const formData = new FormData(form);
+        const button = form.querySelector("button[type=submit]");
+        button.disabled = true;
+        result.replaceChildren();
+        result.textContent = "Creating payment link...";
+
+        try {
+          const response = await fetch("/api/payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              amount: formData.get("amount").toString(),
+              upi_id: merchantProfile.upi_id,
+              merchant_name: merchantProfile.merchant_name,
+              email: merchantProfile.email,
+              note: formData.get("note").toString().trim(),
+            }),
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || "Could not create payment link.");
+          }
+
+          const paymentUrl = new URL(data.url, window.location.origin);
+          const link = document.createElement("a");
+          link.href = paymentUrl.href;
+          link.textContent = paymentUrl.href;
+          const message = document.createElement("p");
+          message.textContent = "Your payment link is ready:";
+          const shareButton = document.createElement("button");
+          shareButton.type = "button";
+          shareButton.textContent = "Share payment link";
+          const shareStatus = document.createElement("p");
+          shareStatus.className = "share-status";
+          shareButton.addEventListener("click", async () => {
+            if (typeof navigator.share === "function") {
+              try {
+                await navigator.share({ title: "UPI payment link", url: paymentUrl.href });
+                shareStatus.textContent = "Link shared.";
+                return;
+              } catch (error) {
+                if (error instanceof DOMException && error.name === "AbortError") {
+                  return;
+                }
+              }
+            }
+
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+              try {
+                await navigator.clipboard.writeText(paymentUrl.href);
+                shareStatus.textContent = "Link copied to clipboard.";
+                return;
+              } catch {
+                shareStatus.textContent = "Could not share or copy the link. Copy the URL above to share it.";
+                return;
+              }
+            }
+
+            shareStatus.textContent = "Sharing is unavailable here. Copy the URL above to share it.";
+          });
+          result.className = "result-card";
+          result.replaceChildren(message, link, shareButton, shareStatus);
+        } catch (error) {
+          result.className = "result-card error";
+          result.textContent = error instanceof Error ? error.message : "Could not create payment link.";
+        } finally {
+          button.disabled = false;
+        }
+      });
+    </script>
+    <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2b131224dfd64d86be8930f2ad38600e"}'></script><!-- End Cloudflare Web Analytics -->
+    <footer class="site-footer">A Vedant Magare Production</footer>
+  </body>
+</html>
