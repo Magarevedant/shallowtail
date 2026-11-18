@@ -28,6 +28,17 @@
       </div>
       <div id="tracker-message" class="result-card tracker-message" aria-live="polite"></div>
       <section id="tracker-summary" class="tracker-summary" aria-label="Payment totals"></section>
+      <div id="tracker-filters" class="tracker-filters" role="group" aria-label="Filter payments by status">
+        <button class="filter-button" type="button" data-filter="all" aria-pressed="true">
+          All <span class="filter-count">0</span>
+        </button>
+        <button class="filter-button" type="button" data-filter="paid" aria-pressed="false">
+          Paid <span class="filter-count">0</span>
+        </button>
+        <button class="filter-button" type="button" data-filter="unpaid" aria-pressed="false">
+          Unpaid <span class="filter-count">0</span>
+        </button>
+      </div>
       <section id="tracker-list" class="tracker-list" aria-label="Created payments"></section>
     </main>
     <footer class="site-footer">A Vedant Magare Production</footer>
@@ -36,6 +47,8 @@
       const trackerList = document.getElementById("tracker-list");
       const trackerSummary = document.getElementById("tracker-summary");
       const trackerMessage = document.getElementById("tracker-message");
+      const trackerFilters = document.getElementById("tracker-filters");
+      let activeFilter = "all";
       const currency = new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",
@@ -72,6 +85,12 @@
 
         const paidCount = payments.filter((payment) => payment.status === "paid").length;
         const unpaidCount = payments.length - paidCount;
+        const filterCounts = { all: payments.length, paid: paidCount, unpaid: unpaidCount };
+        trackerFilters.querySelectorAll("[data-filter]").forEach((button) => {
+          const filter = button.dataset.filter;
+          button.setAttribute("aria-pressed", String(filter === activeFilter));
+          button.querySelector(".filter-count").textContent = String(filterCounts[filter]);
+        });
         [
           ["Total", payments.length],
           ["Paid", paidCount],
@@ -94,8 +113,16 @@
           return;
         }
 
-        payments.forEach((payment) => {
-          const entry = element("article", "payment-entry");
+        const visiblePayments = activeFilter === "all"
+          ? payments
+          : payments.filter((payment) => payment.status === activeFilter);
+        if (visiblePayments.length === 0) {
+          trackerList.append(element("div", "empty-tracker", `No ${activeFilter} payments yet.`));
+          return;
+        }
+
+        visiblePayments.forEach((payment) => {
+          const entry = element("article", `payment-entry ${payment.status}`);
           const details = document.createElement("div");
           details.append(
             element("h2", "", currency.format(Number(payment.amount))),
@@ -135,6 +162,17 @@
           trackerList.append(entry);
         });
       }
+
+      trackerFilters.addEventListener("click", (event) => {
+        const button = event.target instanceof Element
+          ? event.target.closest("[data-filter]")
+          : null;
+        if (!button) {
+          return;
+        }
+        activeFilter = button.dataset.filter;
+        render();
+      });
 
       window.addEventListener("storage", (event) => {
         if (event.key === "shallowtail:payments") {
