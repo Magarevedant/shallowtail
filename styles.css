@@ -204,7 +204,8 @@ h1 {
   margin-top: 0.35rem;
 }
 
-.info-tooltip {
+.info-icon::after {
+  content: attr(data-tooltip);
   position: absolute;
   top: calc(100% + 0.45rem);
   right: 0;
@@ -225,10 +226,11 @@ h1 {
   transition: opacity 140ms ease, transform 140ms ease;
 }
 
-.info-icon:hover .info-tooltip,
-.info-icon:focus .info-tooltip,
-.info-icon:focus-within .info-tooltip {
+.info-icon:hover::after,
+.info-icon:focus::after,
+.info-icon:focus-within::after {
   opacity: 1;
+  pointer-events: none;
   transform: translateY(0);
 }
 
