@@ -1,10 +1,11 @@
-const CACHE_NAME = "shallowtail-shell-v4";
+const CACHE_NAME = "shallowtail-shell-v5";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/generate.html",
   "/setup.html",
   "/track.html",
+  "/vs/razorpay-payment-links.html",
   "/styles.css",
   "/payment.css",
   "/payment-store.js",

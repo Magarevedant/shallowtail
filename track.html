@@ -170,7 +170,11 @@
           const details = document.createElement("div");
           details.append(
             element("h2", "", currency.format(Number(payment.amount))),
-            element("p", "entry-note", payment.note || "No payment note"),
+            element(
+              "p",
+              "entry-note",
+              payment.note ? `Payment reference: ${payment.note}` : "No payment reference",
+            ),
             element("p", "", new Date(payment.createdAt).toLocaleString()),
           );
           const statusLabel = payment.status === "paid" ? "Paid" : "Unpaid";

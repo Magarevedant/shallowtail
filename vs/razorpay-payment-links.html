@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Compare Shallowtail and Razorpay Payment Links: setup, UPI fees, payment confirmation, privacy, and when each is the right fit.">
+    <meta name="theme-color" content="#147d5a">
+    <title>Shallowtail vs Razorpay Payment Links</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css?v=20261119">
+  </head>
+  <body>
+    <nav class="app-nav" aria-label="Main navigation">
+      <a class="app-brand" href="/">Shallowtail</a>
+      <div>
+        <a href="/generate.html">Create link</a>
+        <a href="/track.html">Payment tracker</a>
+      </div>
+    </nav>
+    <main class="comparison-shell">
+      <header class="comparison-header">
+        <p class="eyebrow">A STRAIGHTFORWARD COMPARISON</p>
+        <h1>Shallowtail vs Razorpay Payment Links</h1>
+        <p class="comparison-intro">Both send a UPI payment link over WhatsApp. The difference is what you have to do <em>before</em> the first one goes out — and what you pay after.</p>
+      </header>
+
+      <section class="comparison-section" aria-labelledby="verdict-heading">
+        <h2 id="verdict-heading">Quick verdict</h2>
+        <div class="verdict-grid">
+          <article class="verdict-card shallowtail-verdict">
+            <h3>Choose Shallowtail if…</h3>
+            <p>You're a solo seller taking occasional payments and you don't want an account, KYC documents, or a percentage of every sale. Everything lives in your browser; you can have a working link in under a minute.</p>
+            <a href="/generate.html">Create a payment link <span aria-hidden="true">→</span></a>
+          </article>
+          <article class="verdict-card razorpay-verdict">
+            <h3>Choose Razorpay if…</h3>
+            <p>You sell at volume, need GST invoices, automated refund workflows, or must prove a specific payment landed without checking your own bank statement.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="comparison-heading">
+        <h2 id="comparison-heading">Side-by-side</h2>
+        <div class="comparison-table-wrap" tabindex="0" role="region" aria-label="Side-by-side feature comparison; scroll horizontally on small screens">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">Shallowtail</th>
+                <th scope="col">Razorpay Payment Links</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Signup</th><td>None</td><td>Account + business details</td></tr>
+              <tr><th scope="row">KYC verification</th><td>Not required</td><td>Required before activation</td></tr>
+              <tr><th scope="row">Fees on UPI</th><td>None</td><td>Often 0% MDR on small UPI; varies by method/card <sup><a href="#source-1" aria-label="Source 1">[1]</a></sup></td></tr>
+              <tr><th scope="row">Where data lives</th><td>Your browser only</td><td>Razorpay's servers</td></tr>
+              <tr><th scope="row">Order tracking</th><td>Manual list, local</td><td>Dashboard, unique ID per payment <sup><a href="#source-1" aria-label="Source 1">[1]</a></sup></td></tr>
+              <tr><th scope="row">Payment confirmed?</th><td>You check your bank app</td><td>Automatic via webhook</td></tr>
+              <tr><th scope="row">Refunds</th><td>Manual transfer</td><td>Built-in workflow</td></tr>
+              <tr><th scope="row">GST invoicing</th><td>No</td><td>Yes</td></tr>
+              <tr><th scope="row">Works offline</th><td>App shell cached as PWA</td><td>No</td></tr>
+              <tr><th scope="row">Open source</th><td>Yes</td><td>No</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="razorpay-wins-heading">
+        <h2 id="razorpay-wins-heading">Where Razorpay genuinely wins</h2>
+        <p>Be honest here — this is what makes the page rank and what stops buyers feeling tricked.</p>
+        <ul class="comparison-list">
+          <li><strong>Order-level tracking.</strong> Razorpay assigns a unique payment ID to every transaction, giving a clean order trail a personal UPI handle (or a local list) cannot produce.<sup><a href="#source-1" aria-label="Source 1">[1]</a></sup></li>
+          <li><strong>Automatic confirmation.</strong> No screenshot-chasing; the platform tells you the money arrived.</li>
+          <li><strong>Refunds and disputes</strong> have an audit trail instead of being manual reverse transfers.<sup><a href="#source-1" aria-label="Source 1">[1]</a></sup></li>
+        </ul>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="shallowtail-wins-heading">
+        <h2 id="shallowtail-wins-heading">Where Shallowtail wins</h2>
+        <ul class="comparison-list">
+          <li><strong>Zero friction to first payment.</strong> No PAN, no GSTIN, no "your account is under review."</li>
+          <li><strong>No fees, ever.</strong> There's no company behind it taking a cut.</li>
+          <li><strong>Privacy by architecture.</strong> Merchant details stay in your browser and are encoded into each link rather than stored in a database.</li>
+          <li><strong>Free and open source.</strong> Fork it, self-host it, read exactly what it does with your data.</li>
+        </ul>
+      </section>
+
+      <aside class="honest-tradeoff" aria-labelledby="tradeoff-heading">
+        <h2 id="tradeoff-heading">The honest tradeoff</h2>
+        <p>Shallowtail gives you a link and a QR code. It does not verify that any payment cleared — you confirm that in your own UPI app. If your business needs that verification automatically, that's a real product and it costs money to run. For a home baker, a tutor, or a thrift seller, it usually isn't worth the paperwork.</p>
+      </aside>
+
+      <footer class="comparison-sources">
+        <p id="source-1"><strong>[1]</strong> Razorpay's <a href="https://razorpay.com/docs/payments/payment-links/" rel="noopener noreferrer">Payment Links documentation</a> and <a href="https://razorpay.com/pricing/" rel="noopener noreferrer">pricing information</a>. Fees and product features can vary by payment method and account.</p>
+      </footer>
+    </main>
+    <footer class="site-footer">A Vedant Magare Production</footer>
+    <script src="/pwa.js"></script>
+  </body>
+</html>

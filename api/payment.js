@@ -148,7 +148,7 @@ module.exports = async (request, response) => {
       <p class="eyebrow">UPI payment request</p>
       <h1>${safeDisplayName}</h1>
       <p class="upi-id">UPI ID: ${safeUpiId}</p>
-      ${note ? `<p class="note">${safeNote}</p>` : ""}
+      ${note ? `<p class="note">Payment reference: ${safeNote}</p>` : ""}
       <p class="amount-label">Total to pay</p>
       <p class="amount">₹${safeAmount}</p>
       <a class="button" href="${safePaymentUri}">Open UPI app</a>

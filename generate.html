@@ -83,6 +83,27 @@
       let merchantProfile;
       let shareMethod = "";
 
+      function createPaymentReference() {
+        if (!window.crypto || typeof window.crypto.getRandomValues !== "function") {
+          throw new Error("Secure random references are unavailable in this browser.");
+        }
+
+        function randomIndex(length) {
+          const limit = 256 - (256 % length);
+          const byte = new Uint8Array(1);
+          do {
+            window.crypto.getRandomValues(byte);
+          } while (byte[0] >= limit);
+          return byte[0] % length;
+        }
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const digits = "0123456789";
+        const prefix = Array.from({ length: 4 }, () => letters[randomIndex(letters.length)]).join("");
+        const suffix = Array.from({ length: 3 }, () => digits[randomIndex(digits.length)]).join("");
+        return `${prefix}-${suffix}`;
+      }
+
       async function shareOrCopy(paymentUrl, status) {
         if (typeof navigator.share === "function") {
           try {
@@ -165,6 +186,7 @@
         result.textContent = "Creating payment link...";
 
         try {
+          const paymentReference = createPaymentReference();
           const response = await fetch("/api/payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -173,7 +195,7 @@
               upi_id: merchantProfile.upi_id,
               merchant_name: merchantProfile.merchant_name,
               email: merchantProfile.email,
-              note: "",
+              note: paymentReference,
             }),
           });
           const data = await response.json();
@@ -191,8 +213,11 @@
             : "Your payment link is ready. Opening the share sheet…";
           const shareStatus = document.createElement("p");
           shareStatus.className = "share-status";
+          const reference = document.createElement("p");
+          reference.className = "payment-reference";
+          reference.textContent = `Payment reference: ${paymentReference}`;
           result.className = "result-card";
-          result.replaceChildren(message, link, shareStatus);
+          result.replaceChildren(message, reference, link, shareStatus);
           if (shareMethod) {
             const amount = formData.get("amount").toString();
             const customerMessage = `Hi, please pay ₹${amount}: ${paymentUrl.href}`;
@@ -209,7 +234,7 @@
           try {
             window.ShallowtailPayments.add({
               amount: formData.get("amount").toString(),
-              note: "",
+              note: paymentReference,
               url: paymentUrl.href,
               createdAt: new Date().toISOString(),
               status: "unpaid",
