@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://shallowtail.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://shallowtail.vercel.app/setup</loc>
+  </url>
+  <url>
+    <loc>https://shallowtail.vercel.app/generate</loc>
+  </url>
+  <url>
+    <loc>https://shallowtail.vercel.app/track</loc>
+  </url>
+  <url>
+    <loc>https://shallowtail.vercel.app/vs/razorpay-payment-links</loc>
+  </url>
+</urlset>

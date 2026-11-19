@@ -21,8 +21,8 @@
     <nav class="app-nav" aria-label="Main navigation">
       <a class="app-brand" href="/">Shallowtail</a>
       <div>
-        <a href="/generate.html">Create link</a>
-        <a href="/track.html" aria-current="page">Payment tracker</a>
+        <a href="/generate">Create link</a>
+        <a href="/track" aria-current="page">Payment tracker</a>
       </div>
     </nav>
     <main class="tracker-shell">
@@ -34,7 +34,7 @@
             <span class="info-icon" tabindex="0" role="img" aria-label="Information: Saved only in this browser. Payment statuses are manual and are not verified by UPI." data-tooltip="Saved only in this browser. Payment statuses are manual and are not verified by UPI.">i</span>
           </div>
         </div>
-        <a class="home-cta" href="/generate.html">Create a payment link <span aria-hidden="true">→</span></a>
+        <a class="home-cta" href="/generate">Create a payment link <span aria-hidden="true">→</span></a>
       </div>
       <div id="tracker-message" class="result-card tracker-message" aria-live="polite"></div>
       <section id="tracker-summary" class="tracker-summary" aria-label="Payment totals"></section>
@@ -151,7 +151,7 @@
             element("p", "", "No payments tracked yet. Created payment links will appear here."),
           );
           const createLink = element("a", "", "Create your first payment link");
-          createLink.href = "/generate.html";
+          createLink.href = "/generate";
           empty.append(createLink);
           trackerList.append(empty);
           return;

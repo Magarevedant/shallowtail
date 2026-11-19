@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shallowtail.vercel.app/sitemap.xml

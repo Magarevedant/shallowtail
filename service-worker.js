@@ -1,11 +1,10 @@
-const CACHE_NAME = "shallowtail-shell-v5";
+const CACHE_NAME = "shallowtail-shell-v6";
 const APP_SHELL = [
   "/",
-  "/index.html",
-  "/generate.html",
-  "/setup.html",
-  "/track.html",
-  "/vs/razorpay-payment-links.html",
+  "/generate",
+  "/setup",
+  "/track",
+  "/vs/razorpay-payment-links",
   "/styles.css",
   "/payment.css",
   "/payment-store.js",
@@ -52,7 +51,7 @@ self.addEventListener("fetch", (event) => {
       }).catch(async () => (
         await caches.match(request)
         || await caches.match(url.pathname)
-        || await caches.match("/index.html")
+        || await caches.match("/")
       )),
     );
     return;

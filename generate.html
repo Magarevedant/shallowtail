@@ -27,8 +27,8 @@
     <nav class="app-nav" aria-label="Main navigation">
       <a class="app-brand" href="/">Shallowtail</a>
       <div>
-        <a href="/generate.html" aria-current="page">Create link</a>
-        <a href="/track.html">Payment tracker</a>
+        <a href="/generate" aria-current="page">Create link</a>
+        <a href="/track">Payment tracker</a>
       </div>
     </nav>
     <main class="page-shell">
@@ -70,7 +70,7 @@
           <button type="submit">Create payment link <span aria-hidden="true">→</span></button>
         </form>
         <div id="result" aria-live="polite"></div>
-        <p class="profile-link">Merchant details saved? <a href="/setup.html">Edit your setup</a></p>
+        <p class="profile-link">Merchant details saved? <a href="/setup">Edit your setup</a></p>
       </section>
     </main>
     <script src="/payment-store.js"></script>
@@ -147,12 +147,12 @@
       }
 
       if (!merchantProfile && !result.textContent) {
-        window.location.replace("/setup.html");
+        window.location.replace("/setup");
       } else if (merchantProfile && (
         typeof merchantProfile.upi_id !== "string"
         || !/^[A-Za-z0-9._\-]+@[A-Za-z0-9.-]+$/.test(merchantProfile.upi_id)
       )) {
-        window.location.replace("/setup.html");
+        window.location.replace("/setup");
       }
 
       if (shareMethod) {
@@ -241,7 +241,7 @@
             });
             trackerMessage.textContent = "Saved as unpaid in your payment tracker.";
             const trackerLink = document.createElement("a");
-            trackerLink.href = "/track.html";
+            trackerLink.href = "/track";
             trackerLink.textContent = "View tracker";
             trackerMessage.append(" ", trackerLink);
           } catch (error) {

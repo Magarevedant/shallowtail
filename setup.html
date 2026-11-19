@@ -27,8 +27,8 @@
 <nav class="app-nav" aria-label="Main navigation">
   <a class="app-brand" href="/">Shallowtail</a>
   <div>
-    <a href="/generate.html">Create link</a>
-    <a href="/track.html">Payment tracker</a>
+    <a href="/generate">Create link</a>
+    <a href="/track">Payment tracker</a>
   </div>
 </nav>
     <main class="page-shell">
@@ -109,7 +109,7 @@
 
         try {
           localStorage.setItem("shallowtail:merchant", JSON.stringify(profile));
-          window.location.assign("/generate.html");
+          window.location.assign("/generate");
         } catch {
           setupMessage.className = "result-card error";
           setupMessage.textContent = "Your setup could not be saved. Please enable local storage and try again.";
