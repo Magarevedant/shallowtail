@@ -12,6 +12,8 @@
       && typeof record.createdAt === "string"
       && !Number.isNaN(Date.parse(record.createdAt))
       && (record.status === "paid" || record.status === "unpaid")
+      && (record.paidAt === undefined
+        || (typeof record.paidAt === "string" && !Number.isNaN(Date.parse(record.paidAt))))
       && typeof record.url === "string"
       && isPaymentUrl(record.url);
   }
@@ -73,6 +75,7 @@
       url: payment.url,
       createdAt: payment.createdAt,
       status: "unpaid",
+      paidAt: undefined,
     };
 
     if (!isPaymentRecord(record)) {
@@ -101,6 +104,11 @@
     }
 
     record.status = status;
+    if (status === "paid") {
+      record.paidAt = new Date().toISOString();
+    } else {
+      delete record.paidAt;
+    }
     write(records);
     return record;
   }

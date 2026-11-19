@@ -43,9 +43,6 @@
             <input id="amount" name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required>
           </div>
 
-          <label for="note">Payment note</label>
-          <textarea id="note" name="note" maxlength="140" rows="3" placeholder="What is this payment for?"></textarea>
-
           <div id="customer-contact" class="customer-contact" hidden>
             <label for="customer-phone">Customer phone number <span class="required">Required</span></label>
             <div class="phone-input">
@@ -172,7 +169,7 @@
               upi_id: merchantProfile.upi_id,
               merchant_name: merchantProfile.merchant_name,
               email: merchantProfile.email,
-              note: formData.get("note").toString().trim(),
+              note: "",
             }),
           });
           const data = await response.json();
@@ -194,8 +191,7 @@
           result.replaceChildren(message, link, shareStatus);
           if (shareMethod) {
             const amount = formData.get("amount").toString();
-            const note = formData.get("note").toString().trim();
-            const customerMessage = `Hi, please pay ₹${amount}${note ? ` for ${note}` : ""}: ${paymentUrl.href}`;
+            const customerMessage = `Hi, please pay ₹${amount}: ${paymentUrl.href}`;
             const fullPhoneNumber = `${dialingCode}${nationalNumber}`;
             const deliveryUrl = shareMethod === "whatsapp"
               ? `https://wa.me/${fullPhoneNumber}?text=${encodeURIComponent(customerMessage)}`
@@ -209,7 +205,7 @@
           try {
             window.ShallowtailPayments.add({
               amount: formData.get("amount").toString(),
-              note: formData.get("note").toString().trim(),
+              note: "",
               url: paymentUrl.href,
               createdAt: new Date().toISOString(),
               status: "unpaid",

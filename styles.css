@@ -402,14 +402,15 @@ button:disabled {
 
 .tracker-summary {
   display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
   margin-bottom: 1rem;
 }
 
 .summary-item {
-  flex: 1 1 8rem;
-  padding: 0.85rem 1rem;
+  min-width: 0;
+  padding: 1.15rem 1rem;
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   background: #fff;
@@ -417,12 +418,35 @@ button:disabled {
 
 .summary-item strong {
   display: block;
-  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 .summary-item span {
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.summary-major {
+  min-height: 7.25rem;
+}
+
+.summary-major.revenue {
+  border-color: #c7e7d6;
+  background: linear-gradient(135deg, #f7fcf9, #e5f5ed);
+}
+
+.summary-major.pending {
+  border-color: #f0d7a9;
+  background: linear-gradient(135deg, #fffdf8, #fff1d7);
+}
+
+.summary-major.customers {
+  border-color: #d8e2dc;
+  background: linear-gradient(135deg, #fff, #edf4f0);
 }
 
 .tracker-list {
@@ -596,6 +620,10 @@ button:disabled {
 
   .tracker-heading .home-cta {
     width: 100%;
+  }
+
+  .tracker-summary {
+    grid-template-columns: 1fr;
   }
 
   .payment-entry {

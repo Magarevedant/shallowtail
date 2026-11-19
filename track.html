@@ -91,21 +91,55 @@
           return;
         }
 
-        const paidCount = payments.filter((payment) => payment.status === "paid").length;
-        const unpaidCount = payments.length - paidCount;
+        const now = new Date();
+        const paidPayments = payments.filter((payment) => payment.status === "paid");
+        const unpaidPayments = payments.filter((payment) => payment.status === "unpaid");
+        const paidCount = paidPayments.length;
+        const unpaidCount = unpaidPayments.length;
         const filterCounts = { all: payments.length, paid: paidCount, unpaid: unpaidCount };
         trackerFilters.querySelectorAll("[data-filter]").forEach((button) => {
           const filter = button.dataset.filter;
           button.setAttribute("aria-pressed", String(filter === activeFilter));
           button.querySelector(".filter-count").textContent = String(filterCounts[filter]);
         });
-        [
-          ["Total", payments.length],
-          ["Paid", paidCount],
-          ["Unpaid", unpaidCount],
-        ].forEach(([label, count]) => {
-          const item = element("div", "summary-item");
-          item.append(element("strong", "", String(count)), element("span", "", label));
+        const monthlyRevenue = paidPayments.reduce((total, payment) => {
+          const collectedAt = new Date(payment.paidAt || payment.createdAt);
+          if (
+            collectedAt.getFullYear() === now.getFullYear()
+            && collectedAt.getMonth() === now.getMonth()
+          ) {
+            return total + Number(payment.amount);
+          }
+          return total;
+        }, 0);
+        const pendingAmount = unpaidPayments.reduce(
+          (total, payment) => total + Number(payment.amount),
+          0,
+        );
+
+        const majorMetrics = [
+          {
+            value: currency.format(monthlyRevenue),
+            label: "Revenue collected this month",
+            className: "revenue",
+          },
+          {
+            value: currency.format(pendingAmount),
+            label: "Pending payment amount",
+            className: "pending",
+          },
+          {
+            value: String(payments.length),
+            label: "Customers · Links generated",
+            className: "customers",
+          },
+        ];
+        majorMetrics.forEach((metric) => {
+          const item = element("div", `summary-item summary-major ${metric.className}`);
+          item.append(
+            element("strong", "", metric.value),
+            element("span", "", metric.label),
+          );
           trackerSummary.append(item);
         });
 
