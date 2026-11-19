@@ -108,6 +108,7 @@ module.exports = async (request, response) => {
   paymentUri.searchParams.set("cu", "INR");
   if (note) {
     paymentUri.searchParams.set("tn", note);
+    paymentUri.searchParams.set("tr", note);
   }
 
   try {

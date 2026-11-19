@@ -16,9 +16,10 @@ Created links also appear in `track.html`, where their paid/unpaid status can be
 changed manually. The payment tracker is saved in the current browser's
 `localStorage`; its status does not verify whether UPI received a payment.
 Each generated link includes a short random reference, such as `ABCD-239`, in
-the UPI transaction note and the local tracker. The merchant can use it to
-match a payment where the payer's UPI app and bank statement preserve the note;
-the reference does not confirm that a payment cleared.
+the UPI transaction note (`tn`), reference (`tr`), and local tracker. The
+merchant can use it to match a payment where the payer's UPI app and bank
+statement preserve these fields; the reference does not confirm that a payment
+cleared.
 
 The app can be installed as a PWA. Its static app shell is cached for offline
 access, while payment-link creation still requires a network connection.
