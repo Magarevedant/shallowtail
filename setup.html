@@ -34,8 +34,13 @@
     <main class="page-shell">
       <section class="card">
         <p class="eyebrow">ONE-TIME SETUP</p>
-        <h1>Your merchant details</h1>
-        <p class="intro">Saved only in this browser and added to each payment link you create.</p>
+        <div class="heading-with-info">
+          <h1>Your merchant details</h1>
+          <span class="info-icon" tabindex="0" role="img" aria-label="Information: Saved only in this browser and added to each payment link you create.">
+            i
+            <span class="info-tooltip" role="tooltip">Saved only in this browser and added to each payment link you create.</span>
+          </span>
+        </div>
         <form id="setup-form">
           <label for="upi-id">Merchant UPI ID <span class="required">Required</span></label>
           <input id="upi-id" name="upi_id" type="text" pattern="[A-Za-z0-9._\x2d]+@[A-Za-z0-9.\x2d]+" maxlength="100" placeholder="name@bank" autocomplete="off" required>
@@ -47,8 +52,13 @@
           <input id="email" name="email" type="email" maxlength="254" placeholder="you@example.com" autocomplete="email">
 
           <fieldset class="share-options">
-            <legend>After creating a payment link</legend>
-            <p>Choose an app to open with the payment link, or leave both unselected to use the normal share options.</p>
+            <legend>
+              After creating a payment link
+              <span class="info-icon" tabindex="0" role="img" aria-label="Information: Choose WhatsApp or SMS to open automatically, or leave both unselected for normal share options.">
+                i
+                <span class="info-tooltip" role="tooltip">Choose WhatsApp or SMS to open automatically, or leave both unselected for normal share options.</span>
+              </span>
+            </legend>
             <div class="share-option-buttons">
               <button id="whatsapp-option" class="share-option" type="button" aria-pressed="false">WhatsApp</button>
               <button id="sms-option" class="share-option" type="button" aria-pressed="false">SMS</button>
